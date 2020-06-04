@@ -11,7 +11,10 @@ class App extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: HomeScreen(),
+      home: DefaultTabController(
+        length: 4,
+        child: HomeScreen(),
+      ),
     );
   }
 }

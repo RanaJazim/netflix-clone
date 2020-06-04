@@ -11,24 +11,66 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        title: AppBarTitle(),
+        title: _AppBarTitle(),
         backgroundColor: Colors.transparent,
       ),
+      bottomNavigationBar: _bottomTabs(),
       body: ListView(
         children: <Widget>[
-          ImageSection(),
+          _ImageSection(),
           SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.all(10),
             child: Previews(),
           ),
+          SizedBox(height: 5),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: FeaturedVideoList("Continue Watching For Jazim Abbas"),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _bottomTabs() {
+    return TabBar(
+      indicatorColor: Colors.transparent,
+      unselectedLabelStyle: TextStyle(
+        color: Colors.white.withOpacity(0.8),
+      ),
+      tabs: <Widget>[
+        Tab(
+          icon: Icon(Icons.home),
+          child: _tabText("Home"),
+        ),
+        Tab(
+          icon: Icon(Icons.search),
+          child: _tabText("Search"),
+        ),
+        Tab(
+          icon: Icon(Icons.search),
+          child: _tabText("Coming Soon"),
+        ),
+        Tab(
+          icon: Icon(Icons.menu),
+          child: _tabText("Menu"),
+        ),
+      ],
+    );
+  }
+
+  Widget _tabText(String title) {
+    return Text(
+      "$title",
+      style: const TextStyle(
+        fontSize: 11
       ),
     );
   }
 }
 
-class AppBarTitle extends StatelessWidget {
+class _AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -51,7 +93,7 @@ class AppBarTitle extends StatelessWidget {
   }
 }
 
-class ImageSection extends StatelessWidget {
+class _ImageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -72,7 +114,6 @@ class ImageSection extends StatelessWidget {
         Positioned(
           bottom: 10,
           left: (MediaQuery.of(context).size.width / 4) - 20,
-          // right: 50,
           child: VideoActionButtons(),
         ),
       ],
@@ -89,9 +130,9 @@ class VideoActionButtons extends StatelessWidget {
         _iconBelowText(Icons.add, "My List"),
         SizedBox(width: 40),
         FlatButton.icon(
-          color: Colors.white70,
+          color: Colors.white,
           icon: Icon(
-            Icons.playlist_play,
+            Icons.play_circle_filled,
             color: Colors.black,
           ),
           label: const Text(
@@ -144,7 +185,7 @@ class Previews extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Container(
-          height: 200,
+          height: 150,
           child: _previewList(),
         ),
       ],
@@ -180,6 +221,41 @@ class Previews extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class FeaturedVideoList extends StatelessWidget {
+  final String _title;
+
+  FeaturedVideoList(this._title);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "$_title",
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        SizedBox(height: 5),
+        Container(
+          height: 150,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (_, index) => Container(
+              padding: EdgeInsets.only(right: 5.0, top: 5.0),
+              child: Image.network(_headerImg),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
