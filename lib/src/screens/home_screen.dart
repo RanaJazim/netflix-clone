@@ -1,5 +1,6 @@
 import 'package:netflix_clone/src/screens/coming_soon_screen.dart';
 import 'package:netflix_clone/src/screens/menu_screen.dart';
+import 'package:netflix_clone/src/screens/my_list_screen.dart';
 import 'package:netflix_clone/src/screens/single_preview_screen.dart';
 import 'package:netflix_clone/src/widgets/video_action_buttons.dart';
 
@@ -96,19 +97,29 @@ class _AppBarTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        _title("Movies"),
-        _title("TV Shows"),
-        _title("My List"),
+        _title(context, "Movies"),
+        _title(context, "TV Shows"),
+        _title(context, "My List"),
       ],
     );
   }
 
-  Widget _title(String title) {
-    return Text(
-      "$title",
-      style: const TextStyle(
-        fontSize: 14,
+  Widget _title(context, String title) {
+    return GestureDetector(
+      child: Text(
+        "$title",
+        style: const TextStyle(
+          fontSize: 14,
+        ),
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => MyListScreen(),
+          ),
+        );
+      },
     );
   }
 }

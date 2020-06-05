@@ -64,7 +64,7 @@ class _SinglePreviewScreenState extends State<SinglePreviewScreen> {
           ),
           Positioned(
             top: 50,
-            right: 30,
+            right: 20,
             child: IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
