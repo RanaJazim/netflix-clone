@@ -1,6 +1,7 @@
 import 'package:netflix_clone/src/screens/coming_soon_screen.dart';
 import 'package:netflix_clone/src/screens/menu_screen.dart';
 import 'package:netflix_clone/src/screens/my_list_screen.dart';
+import 'package:netflix_clone/src/screens/single_movie_screen.dart';
 import 'package:netflix_clone/src/screens/single_preview_screen.dart';
 import 'package:netflix_clone/src/widgets/video_action_buttons.dart';
 
@@ -236,16 +237,26 @@ class _FeaturedVideoList extends StatelessWidget {
           ),
         ),
         SizedBox(height: 5),
-        Container(
-          height: 150,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (_, index) => Container(
-              padding: EdgeInsets.only(right: 5.0, top: 5.0),
-              child: Image.network(_headerImg),
+        GestureDetector(
+          child: Container(
+            height: 150,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (_, index) => Container(
+                padding: EdgeInsets.only(right: 5.0, top: 5.0),
+                child: Image.network(_headerImg),
+              ),
             ),
           ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => SingleMovieScreen(),
+              ),
+            );
+          },
         ),
       ],
     );
