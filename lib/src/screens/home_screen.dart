@@ -1,3 +1,8 @@
+import 'package:netflix_clone/src/screens/coming_soon_screen.dart';
+import 'package:netflix_clone/src/screens/menu_screen.dart';
+import 'package:netflix_clone/src/screens/single_preview_screen.dart';
+import 'package:netflix_clone/src/widgets/video_action_buttons.dart';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,19 +20,12 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       bottomNavigationBar: _bottomTabs(),
-      body: ListView(
+      body: TabBarView(
         children: <Widget>[
-          _ImageSection(),
-          SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: Previews(),
-          ),
-          SizedBox(height: 5),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: FeaturedVideoList("Continue Watching For Jazim Abbas"),
-          ),
+          _HomeScreenView(),
+          Text("Search"),
+          ComingSoonScreen(),
+          MenuScreen(),
         ],
       ),
     );
@@ -40,32 +38,54 @@ class HomeScreen extends StatelessWidget {
         color: Colors.white.withOpacity(0.8),
       ),
       tabs: <Widget>[
-        Tab(
-          icon: Icon(Icons.home),
-          child: _tabText("Home"),
+        _clickableTab(
+          "Home",
+          Icons.home,
         ),
-        Tab(
-          icon: Icon(Icons.search),
-          child: _tabText("Search"),
+        _clickableTab(
+          "Search",
+          Icons.search,
         ),
-        Tab(
-          icon: Icon(Icons.search),
-          child: _tabText("Coming Soon"),
+        _clickableTab(
+          "Coming Soon",
+          Icons.video_library,
         ),
-        Tab(
-          icon: Icon(Icons.menu),
-          child: _tabText("Menu"),
+        _clickableTab(
+          "Menu",
+          Icons.menu,
         ),
       ],
     );
   }
 
-  Widget _tabText(String title) {
-    return Text(
-      "$title",
-      style: const TextStyle(
-        fontSize: 11
+  Widget _clickableTab(String title, IconData icon) {
+    return Tab(
+      icon: Icon(icon),
+      child: Text(
+        "$title",
+        style: const TextStyle(fontSize: 11),
       ),
+    );
+  }
+}
+
+class _HomeScreenView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        _ImageSection(),
+        SizedBox(height: 10),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: _Previews(),
+        ),
+        SizedBox(height: 5),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: _FeaturedVideoList("Continue Watching For Jazim Abbas"),
+        ),
+      ],
     );
   }
 }
@@ -121,56 +141,7 @@ class _ImageSection extends StatelessWidget {
   }
 }
 
-class VideoActionButtons extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        _iconBelowText(Icons.add, "My List"),
-        SizedBox(width: 40),
-        FlatButton.icon(
-          color: Colors.white,
-          icon: Icon(
-            Icons.play_circle_filled,
-            color: Colors.black,
-          ),
-          label: const Text(
-            "Play",
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onPressed: () {},
-        ),
-        SizedBox(width: 40),
-        _iconBelowText(Icons.info, "Info"),
-      ],
-    );
-  }
-
-  Widget _iconBelowText(IconData icon, String title) {
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          color: Colors.white,
-        ),
-        SizedBox(height: 5),
-        Text(
-          "$title",
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Previews extends StatelessWidget {
+class _Previews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -196,39 +167,49 @@ class Previews extends StatelessWidget {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: 10,
-      itemBuilder: (_, index) => Container(
-        width: 100,
-        margin: EdgeInsets.only(top: 5.0, right: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 55,
-              backgroundColor: Colors.white,
-              child: CircleAvatar(
-                radius: 53,
-                backgroundImage: NetworkImage(_headerImg),
+      itemBuilder: (ctx, index) => GestureDetector(
+        child: Container(
+          width: 100,
+          margin: EdgeInsets.only(top: 5.0, right: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 55,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 53,
+                  backgroundImage: NetworkImage(_headerImg),
+                ),
               ),
-            ),
-            SizedBox(height: 5),
-            Center(
-              child: Text(
-                "World War Z",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              SizedBox(height: 5),
+              Center(
+                child: Text(
+                  "World War Z",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        onTap: () {
+          Navigator.push(
+            ctx,
+            MaterialPageRoute(
+              builder: (_) => SinglePreviewScreen(),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-class FeaturedVideoList extends StatelessWidget {
+class _FeaturedVideoList extends StatelessWidget {
   final String _title;
 
-  FeaturedVideoList(this._title);
+  _FeaturedVideoList(this._title);
 
   @override
   Widget build(BuildContext context) {
@@ -264,21 +245,3 @@ final _netflixImg =
     "https://i.pinimg.com/236x/19/3f/ab/193fabc89f1d0fe84cc480b375cbffa7.jpg";
 final _headerImg =
     "https://i.pinimg.com/236x/9f/57/5d/9f575de10e5ab3b5da01e6d42281e765.jpg";
-
-// ClipOval(
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   shape: BoxShape.circle,
-//                   border: Border.all(
-//                     color: Colors.red,
-//                     width: 2.0,
-//                     style: BorderStyle.solid,
-//                   ),
-//                 ),
-//                 child: Image.network(
-//                   _headerImg,
-//                   fit: BoxFit.cover,
-//                   width: double.infinity,
-//                 ),
-//               ),
-//             ),
